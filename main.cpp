@@ -19,6 +19,7 @@
 #include <stdlib.h>
 
 #include "galois.h"
+#include "matrix.h"
 
 void multiplication_test() {
     if (multiply(3, 4) != 12) {
@@ -37,7 +38,8 @@ void multiplication_test() {
 
 int main(int argc, char *argv[]) {
     galois_init();
-    multiplication_test();
+//    multiplication_test();
+    matrix_t *m = matrix_identity(2);
     
     return 0;
 }

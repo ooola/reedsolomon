@@ -294,9 +294,9 @@ BYTE exp(BYTE a, int n) {
  * Generates a logarithm table given a starting polynomial.
  */
 int16_t* generateLogTable(int polynomial) {
-    int16_t* result = (int16_t *) malloc(FIELD_SIZE);
+    int16_t* result = (int16_t *) calloc(FIELD_SIZE, 1);
     if (!result) {
-        fprintf(stderr, "malloc() failed");
+        fprintf(stderr, "calloc() failed");
         exit(1);
     }
     for (int i = 0; i < FIELD_SIZE; i++) {
@@ -321,9 +321,10 @@ int16_t* generateLogTable(int polynomial) {
  * Generates the inverse log table.
  */
 BYTE* generateExpTable(int16_t* logTable) {
-    BYTE* result = (BYTE *) malloc((FIELD_SIZE * 2) - 2);
+    size_t data_size = (FIELD_SIZE * 2) - 2;
+    BYTE* result = (BYTE *) calloc(data_size, 1);
     if (!result) {
-        fprintf(stderr, "malloc failure");
+        fprintf(stderr, "calloc failure");
         exit(1);
     }
     for (int i = 1; i < FIELD_SIZE; i++) {
@@ -342,7 +343,7 @@ BYTE* generateExpTable(int16_t* logTable) {
  *     MULTIPLICATION_TABLE[a][b]
  */
 BYTE* generateMultiplicationTable() {
-    BYTE *result = (BYTE *) malloc(65536); // 256*256 = 65536
+    BYTE *result = (BYTE *) calloc(65536, 1); // 256*256 = 65536
     if (result == NULL) {
         fprintf(stderr, "malloc failure");
         exit(1);
