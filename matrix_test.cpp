@@ -306,3 +306,27 @@ TEST_CASE("matrix inverse2 test") {
     CHECK(1 == matrix_get(inverted, 4, 3));
     CHECK(0 == matrix_get(inverted, 4, 4));
 }
+
+TEST_CASE("matrix test get row") {
+    BYTE d[25] = { 1, 0, 0, 0, 0, 
+                   0, 1, 0, 0, 0,
+                   0, 0, 0, 1, 0,
+                   0, 0, 0, 0, 1,
+                   7, 7, 6, 6, 1 };
+    matrix_t *m = matrix(5, 5, d);
+     // matrix should be as follows
+     // [ 1, 0, 0, 0, 0 ]
+     // [ 0, 1, 0, 0, 0 ]
+     // [ 0, 0, 0, 1, 0 ]
+     // [ 0, 0, 0, 0, 1 ]
+     // [ 7, 7, 6, 6, 1 ]
+     //
+    CHECK(5 == m->rows);
+    CHECK(5 == m->columns);
+    BYTE *row = matrix_get_row(m, 4);
+    CHECK(7 == matrix_get(m, 4, 0));
+    CHECK(7 == matrix_get(m, 4, 1));
+    CHECK(6 == matrix_get(m, 4, 2));
+    CHECK(6 == matrix_get(m, 4, 3));
+    CHECK(1 == matrix_get(m, 4, 4));
+}

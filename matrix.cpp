@@ -236,17 +236,19 @@ matrix_t* matrix_submatrix(matrix_t* m, int rmin, int cmin, int rmax, int cmax) 
 
 /**
  * Returns one row of the matrix as a byte array.
- * TODO
+ * caller must free the row
  */
-/*
-BYTE* getRow(int row) {
-    byte [] result = new byte [columns];
-    for (int c = 0; c < columns; c++) {
-        result[c] = get(row, c);
+BYTE* matrix_get_row(matrix_t* m, int row) {
+    BYTE *result = (BYTE *) calloc(1, m->columns);
+    if (!result) {
+        fprintf(stderr, "malloc failure, exitin\n");
+        exit(1);
+    }
+    for (int c = 0; c < m->columns; c++) {
+        result[c] = matrix_get(m, row, c);
     }
     return result;
 }
-*/
 
 /**
  * Exchanges two rows in the matrix.
