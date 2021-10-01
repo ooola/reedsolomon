@@ -216,7 +216,7 @@ matrix_t* augment(matrix_t *m, matrix_t* right) {
 
 /**
  * Returns a part of matrix m.
- * TODO
+ * Caller must free memory
  */
 matrix_t* matrix_submatrix(matrix_t* m, int rmin, int cmin, int rmax, int cmax) {
     if (!m) {

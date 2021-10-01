@@ -68,14 +68,32 @@ rs_t* rs(int dataShardCount, int parityShardCount) {
     r->parity_shards = parityShardCount;
     size_t totalShardCount = dataShardCount + parityShardCount;
     r->m = buildMatrix(dataShardCount, totalShardCount);
+    printf("here is the matrix\n");
+    matrix_print(r->m, false);
 
     //parityRows = new byte [parityShardCount] [];
     /*
-    r->parity_rows = 
-    for (int i = 0; i < parityShardCount; i++) {
-        parityRows[i] = matrix.getRow(dataShardCount + i);
+    for (int i = 0; i < parityShardCount; i *= r->m->columns) {
+        r->parity_rows[i] = matrix_get_row(m, ) matrix.getRow(dataShardCount + i);
+    } */
+    // probably should do this with memcmp but no premature optimizations
+
+    /* this works
+    r->parity_rows = (BYTE *) calloc(1, parityShardCount * r->m->columns);
+    if (!r->parity_rows) {
+        fprintf(stderr, "Failed to allocated memory for parity rows - exiting.");
+        exit(1);
+    }
+    for (size_t row = 0; row < parityShardCount; row++) {
+        for (size_t column = 0; column < r->m->columns; column++) {
+            int offset = (row * r->m->columns) + column;
+            //int rowOffset = (dataShardCount * r->m->columns) + row;
+            r->parity_rows[offset] = matrix_get(r->m, dataShardCount + row, column);
+        }
     }
     */
+   r->parity_rows = matrix_submatrix(r->m, parityShardCount, 0, r->m->rows, r->m->columns);
+
    return r;
 }
 
@@ -97,45 +115,66 @@ void encode_parity(rs_t* r, BYTE *shards, int offset, int byte_count)
 
     //byte [] [] outputs = new byte [parityShardCount] [];
     //System.arraycopy(shards, dataShardCount, outputs, 0, parityShardCount);
+    /*
     BYTE* outputs = (BYTE*) calloc(1, r->parity_shards * byte_count);
     if (!outputs) {
         fprintf(stderr, "failed to allocate output memory, exiting...\n");
         exit(1);
     }
-    // TODO: what about offset ???
-    memcpy(outputs, shards + (r->data_shards * byte_count), (r->parity_shards * byte_count));
+    */
 
-    code_some_shards(r, shards, outputs, offset, byte_count);
+    // TODO: what about offset ???
+    /*
+    void *dest = shards + (r->data_shards * byte_count);
+    size_t count = (r->parity_shards * byte_count);
+    memcpy(dest, r->parity_shards, count);
+    */
+
+    BYTE* outputs = shards + (r->data_shards * byte_count);
+
+    //code_some_shards(r, shards, r->data_shards, outputs, offset, byte_count);
+    code_some_shards(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
 }
 
 /**
- * ByteInputOutputExpCodingLoop
+ * ByteOutputInputExpCodingLoop
+ * r contains the parity rows
+ * // Do the coding.
+   codingLoop.codeSomeShards(
+           parityRows,
+           shards, dataShardCount,
+           outputs, parityShardCount,
+           offset, byteCount);
+
+     public void codeSomeShards(
+            byte[][] matrixRows, 
+            byte[][] inputs, int inputCount,
+            byte[][] outputs, int outputCount,
+            int offset, int byteCount) {
  */
-void code_some_shards(rs_t* r, BYTE* shards, BYTE* outputs, int offset, int byte_count)
+void code_some_shards(rs_t* r, BYTE* input_shards, int input_count, 
+                      BYTE* outputs, int output_count, int offset, int byte_count)
 {
-    /*
-    wip
+    matrix_t* m = r->parity_rows; // parity rows
     for (int iByte = offset; iByte < offset + byte_count; iByte++) {
-    {
-        int iInput = 0;
-        byte[] inputShard = inputs[iInput];
-        byte inputByte = inputShard[iByte];
-        for (int iOutput = 0; iOutput < outputCount; iOutput++) {
-            byte[] outputShard = outputs[iOutput];
-            byte[] matrixRow = matrixRows[iOutput];
-            outputShard[iByte] = Galois.multiply(matrixRow[iInput], inputByte);
+        for (int iOutput = 0; iOutput < output_count; iOutput++) {
+            // matrix_rows are from the matrix embedded in rs;
+            //byte [] matrixRow = matrixRows[iOutput];
+            BYTE* matrixRow = matrix_get_row(m, iOutput);
+            int value = 0;
+            for (BYTE iInput = 0; iInput < input_count; iInput++) {
+                //BYTE = input_shards[iInput]
+                BYTE a = matrixRow[iInput];
+
+                // inputs[iInput][iByte];
+                // calculate the equivalent byte location
+                int addr = (iInput * byte_count) + iByte;
+                BYTE b = input_shards[addr];
+                value ^= multiply(a, b);
+                //value ^= multiply(matrixRow[iInput], inputs[iInput][iByte]);
+            }
+            int output_addr = (iOutput * byte_count) + iByte;
+            outputs[output_addr] =  value;
         }
     }
-
-    for (int iInput = 1; iInput < inputCount; iInput++) {
-        final byte[] inputShard = inputs[iInput];
-        final byte inputByte = inputShard[iByte];
-        for (int iOutput = 0; iOutput < outputCount; iOutput++) {
-            final byte[] outputShard = outputs[iOutput];
-            final byte[] matrixRow = matrixRows[iOutput];
-            outputShard[iByte] ^= Galois.multiply(matrixRow[iInput], inputByte);
-        }
-    }
-    */
-
 }
