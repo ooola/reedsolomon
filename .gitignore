@@ -16,4 +16,4 @@ test2
 matrix_test
 build
 rs_test
-sample-input.txt.0 sample-input.txt.1 sample-input.txt.2 sample-input.txt.3 sample-input.txt.4 sample-input.txt.5
+sample-input.txt.*
