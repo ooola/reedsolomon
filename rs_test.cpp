@@ -31,4 +31,6 @@ TEST_CASE("test one encode") {
     CHECK(shards[17] == 91);
     CHECK(shards[18] == 94);
     CHECK(shards[19] == 95);
+
+    //TODO do implement isParityCorrect() function
 }
