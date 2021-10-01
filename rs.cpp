@@ -92,7 +92,8 @@ rs_t* rs(int dataShardCount, int parityShardCount) {
         }
     }
     */
-   r->parity_rows = matrix_submatrix(r->m, parityShardCount, 0, r->m->rows, r->m->columns);
+   //r.. , dataShardCount, 0, r-m-rows, r-m-column
+   r->parity_rows = matrix_submatrix(r->m, dataShardCount, 0, r->m->rows, r->m->columns);
 
    return r;
 }

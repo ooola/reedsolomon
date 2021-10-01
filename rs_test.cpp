@@ -3,7 +3,6 @@
 #include "doctest.h"
 
 TEST_CASE("test one encode") {
-    //CHECK(4 == m->rows);
     rs_t* r = rs(5, 5);
     std::cout << " here's the matrix\n";
     matrix_print(r->m, false);

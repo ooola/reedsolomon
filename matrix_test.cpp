@@ -60,6 +60,28 @@ TEST_CASE("submatrix test") {
     CHECK(1 == matrix_get(m, 1, 1));
 }
 
+TEST_CASE("submatrix test 2") {
+    BYTE d[24] = { 1,   0,  0,  0,
+                   0,   1,  0,  0,
+                   0,   0,  1,  0,
+                   0,   0,  0,  1,
+                   27, 28, 18, 20,
+                   28, 27, 20, 18 };
+    matrix_t *m = matrix(6, 4, d);
+    matrix_t *s = matrix_submatrix(m, 4, 0, 6, 4);
+    CHECK(2 == s->rows);
+    CHECK(4 == s->columns);
+
+    CHECK(27 == matrix_get(s, 0, 0));
+    CHECK(28 == matrix_get(s, 0, 1));
+    CHECK(18 == matrix_get(s, 0, 2));
+    CHECK(20 == matrix_get(s, 0, 3));
+    CHECK(28 == matrix_get(s, 1, 0));
+    CHECK(27 == matrix_get(s, 1, 1));
+    CHECK(20 == matrix_get(s, 1, 2));
+    CHECK(18 == matrix_get(s, 1, 3));
+}
+
 TEST_CASE("matrix swap test") {
     matrix_t *m = matrix_identity(4);
     // * matrix should be as follows

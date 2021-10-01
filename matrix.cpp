@@ -228,7 +228,9 @@ matrix_t* matrix_submatrix(matrix_t* m, int rmin, int cmin, int rmax, int cmax) 
         for (int c = cmin; c < cmax; c++) {
             //result.data[r - rmin][c - cmin] = data[r][c];
             BYTE data = matrix_get(m, r, c);
-            matrix_set(result, r - rmin, c - cmin, data);
+            int dest_row = r - rmin;
+            int dest_column = c - cmin;
+            matrix_set(result, dest_row, dest_column, data);
         }
     }
     return result;
