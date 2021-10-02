@@ -107,7 +107,6 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    // write the file size into the buffer
     // java is big endian so to be compatible with JavaReedSolomon
     int32_t big_endian_file_size = myntohl(fileSize);
     memcpy(file_buffer, &big_endian_file_size, BYTES_IN_INT);

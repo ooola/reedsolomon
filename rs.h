@@ -1,20 +1,4 @@
-/*
- * =====================================================================================
- *
- *       Filename:  rs.h
- *
- *    Description:  jjj
- *
- *        Version:  1.0
- *        Created:  09/19/2021 14:07:51
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
- */
+// Copyright 2021 Ola Nordstrom
 
 #include "matrix.h"
 

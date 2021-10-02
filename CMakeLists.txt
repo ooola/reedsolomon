@@ -9,6 +9,7 @@ enable_testing()
 
 #add_definitions(-Wno-narrowing)
 
+
 add_executable(rs main.cpp galois.cpp matrix.cpp rs.cpp)
 
 add_library(test_main OBJECT test_main.cpp)
