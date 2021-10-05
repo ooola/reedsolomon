@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVAREEDSOLOMONDIR=~/code/JavaReedSolomon
+JAVAREEDSOLOMONDIR=~/src/JavaReedSolomon
 
 for i in sample-input.txt.?; do
 	diff $i ${JAVAREEDSOLOMONDIR}/$i
