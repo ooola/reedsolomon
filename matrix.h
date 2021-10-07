@@ -32,6 +32,7 @@ typedef struct matrix {
  */
 
 matrix_t* matrix_init(int initRows, int initColumns);
+void matrix_free(matrix_t *m);
 matrix_t* matrix(int rows, int columns, BYTE *initData);
 matrix_t* matrix_identity(int size);
 void matrix_print(matrix_t *m, bool hex);

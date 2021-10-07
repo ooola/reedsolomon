@@ -13,6 +13,7 @@ typedef struct _rs {
 } rs_t;
 
 rs_t* rs(int dataShardCount, int parityShardCount); // call this to make a new encoder
+void rs_free(rs_t* r);
 matrix_t* vandermonde(int rows, int cols);
 matrix_t* buildMatrix(int dataShards, int totalShards);
 void encode_parity(rs_t* r, BYTE* shards, int offset, int byte_count);

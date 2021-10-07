@@ -136,6 +136,8 @@ int main(int argc, char *argv[])
         char *buf = file_buffer + (i * shardSize);
         write_file(output_filename, buf, shardSize);
         printf("wrote %s\n", output_filename);
+        free(output_filename);
     }
+    rs_free(reed_solomon);
     return 0;
 }

@@ -11,6 +11,13 @@ rs_t* rs_new()
     return r;
 }
 
+void rs_free(rs_t* r)
+{
+    matrix_free(r->parity_rows);
+    matrix_free(r->m);
+    free_memory(r);
+}
+
 /**
  * Create a Vandermonde matrix, which is guaranteed to have the
  * property that any subset of rows that forms a square matrix
@@ -44,6 +51,10 @@ matrix_t* buildMatrix(int dataShards, int totalShards) {
     matrix_t *inverted = matrix_invert(top);
 
     matrix_t *rv = matrix_times(vm, inverted);
+
+    free_memory(vm);
+    free_memory(top);
+    free_memory(inverted);
     return rv;
 }
 
