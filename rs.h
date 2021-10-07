@@ -8,10 +8,8 @@ typedef struct _rs {
     int data_shards;
     int parity_shards; 
     int total_shards;
-    matrix_t *m;
-    int parity_row_count;
-    int parity_row_size;
     matrix_t* parity_rows;
+    matrix_t *m;
 } rs_t;
 
 rs_t* rs(int dataShardCount, int parityShardCount); // call this to make a new encoder

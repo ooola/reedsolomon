@@ -100,9 +100,11 @@ int main(int argc, char *argv[])
     int shardSize = (storedSize + DATA_SHARDS - 1) / DATA_SHARDS;
 
     // Create a buffer holding the file size, followed by
-    // the contents of the file.
-    int bufferSize = shardSize * DATA_SHARDS;
+    // the contents of the file and the coded shards.
+    int bufferSize = shardSize * TOTAL_SHARDS;
     char* file_buffer = (char*) allocate_shared_memory_or_exit((size_t)bufferSize);
+
+    //printf("file bufferSize: %d shardSize: %d stored size: %d\n", bufferSize, shardSize, storedSize);
 
     // java is big endian so to be compatible with JavaReedSolomon convert the filesize to big endian
     int32_t big_endian_file_size = myntohl(fileSize);

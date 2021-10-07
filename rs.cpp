@@ -63,8 +63,8 @@ rs_t* rs(int dataShardCount, int parityShardCount) {
 
     r->data_shards = dataShardCount;
     r->parity_shards = parityShardCount;
-    size_t totalShardCount = dataShardCount + parityShardCount;
-    r->m = buildMatrix(dataShardCount, totalShardCount);
+    r->total_shards = dataShardCount + parityShardCount;
+    r->m = buildMatrix(dataShardCount, r->total_shards);
     printf("here is the matrix\n");
     matrix_print(r->m, false);
 
