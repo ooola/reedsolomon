@@ -1,16 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "util.h"
 #include "rs.h"
 #include "matrix.h"
 #include "galois.h"
 
 rs_t* rs_new()
 {
-    rs_t* r = (rs_t*) malloc(sizeof(rs_t));
-    if (!r) {
-        fprintf(stderr, "failed to allocate reed solomon struct, exiting.");
-        exit(1);
-    }
+    rs_t* r = (rs_t*) allocate_shared_memory_or_exit(sizeof(rs_t));
     return r;
 }
 
@@ -71,31 +68,9 @@ rs_t* rs(int dataShardCount, int parityShardCount) {
     printf("here is the matrix\n");
     matrix_print(r->m, false);
 
-    //parityRows = new byte [parityShardCount] [];
-    /*
-    for (int i = 0; i < parityShardCount; i *= r->m->columns) {
-        r->parity_rows[i] = matrix_get_row(m, ) matrix.getRow(dataShardCount + i);
-    } */
-    // probably should do this with memcmp but no premature optimizations
+    r->parity_rows = matrix_submatrix(r->m, dataShardCount, 0, r->m->rows, r->m->columns);
 
-    /* this works
-    r->parity_rows = (BYTE *) calloc(1, parityShardCount * r->m->columns);
-    if (!r->parity_rows) {
-        fprintf(stderr, "Failed to allocated memory for parity rows - exiting.");
-        exit(1);
-    }
-    for (size_t row = 0; row < parityShardCount; row++) {
-        for (size_t column = 0; column < r->m->columns; column++) {
-            int offset = (row * r->m->columns) + column;
-            //int rowOffset = (dataShardCount * r->m->columns) + row;
-            r->parity_rows[offset] = matrix_get(r->m, dataShardCount + row, column);
-        }
-    }
-    */
-   //r.. , dataShardCount, 0, r-m-rows, r-m-column
-   r->parity_rows = matrix_submatrix(r->m, dataShardCount, 0, r->m->rows, r->m->columns);
-
-   return r;
+    return r;
 }
 
 /**
@@ -114,26 +89,8 @@ void encode_parity(rs_t* r, BYTE *shards, int offset, int byte_count)
         exit(1);
     }
 
-    //byte [] [] outputs = new byte [parityShardCount] [];
-    //System.arraycopy(shards, dataShardCount, outputs, 0, parityShardCount);
-    /*
-    BYTE* outputs = (BYTE*) calloc(1, r->parity_shards * byte_count);
-    if (!outputs) {
-        fprintf(stderr, "failed to allocate output memory, exiting...\n");
-        exit(1);
-    }
-    */
-
-    // TODO: what about offset ???
-    /*
-    void *dest = shards + (r->data_shards * byte_count);
-    size_t count = (r->parity_shards * byte_count);
-    memcpy(dest, r->parity_shards, count);
-    */
-
     BYTE* outputs = shards + (r->data_shards * byte_count);
 
-    //code_some_shards(r, shards, r->data_shards, outputs, offset, byte_count);
     code_some_shards(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
 }
 

@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "util.h"
 #include "galois.h"
 
 /**
@@ -294,11 +295,7 @@ BYTE exp(BYTE a, int n) {
  * Generates a logarithm table given a starting polynomial.
  */
 int16_t* generateLogTable(int polynomial) {
-    int16_t* result = (int16_t *) calloc(FIELD_SIZE, 1);
-    if (!result) {
-        fprintf(stderr, "calloc() failed");
-        exit(1);
-    }
+    int16_t* result = (int16_t *) allocate_shared_memory_or_exit((size_t)FIELD_SIZE);
     for (int i = 0; i < FIELD_SIZE; i++) {
         result[i] = -1; // -1 means "not set"
     }
@@ -322,11 +319,7 @@ int16_t* generateLogTable(int polynomial) {
  */
 BYTE* generateExpTable(int16_t* logTable) {
     size_t data_size = (FIELD_SIZE * 2) - 2;
-    BYTE* result = (BYTE *) calloc(data_size, 1);
-    if (!result) {
-        fprintf(stderr, "calloc failure");
-        exit(1);
-    }
+    BYTE* result = (BYTE *) allocate_shared_memory_or_exit((size_t)data_size);
     for (int i = 1; i < FIELD_SIZE; i++) {
         int log = logTable[i];
         result[log] = (BYTE) i;
@@ -343,7 +336,7 @@ BYTE* generateExpTable(int16_t* logTable) {
  *     MULTIPLICATION_TABLE[a][b]
  */
 BYTE* generateMultiplicationTable() {
-    BYTE *result = (BYTE *) calloc(65536, 1); // 256*256 = 65536
+    BYTE *result = (BYTE *) allocate_shared_memory_or_exit(65536); // 256*256 = 65536
     if (result == NULL) {
         fprintf(stderr, "malloc failure");
         exit(1);

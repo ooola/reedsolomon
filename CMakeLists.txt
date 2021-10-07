@@ -10,7 +10,7 @@ enable_testing()
 #add_definitions(-Wno-narrowing)
 
 
-add_executable(rs main.cpp galois.cpp matrix.cpp rs.cpp)
+add_executable(rs main.cpp galois.cpp matrix.cpp rs.cpp util.cpp)
 
 add_library(test_main OBJECT test_main.cpp)
 
@@ -20,13 +20,13 @@ add_test(NAME test1 COMMAND test1)
 add_executable(test2 test2.cpp $<TARGET_OBJECTS:test_main>)
 add_test(NAME test2 COMMAND test2 )
 
-add_executable(galois_test galois_test.cpp galois.cpp $<TARGET_OBJECTS:test_main>)
+add_executable(galois_test galois_test.cpp galois.cpp util.cpp $<TARGET_OBJECTS:test_main>)
 add_test(NAME galois_test COMMAND galois_test)
 
-add_executable(matrix_test matrix_test.cpp matrix.cpp galois.cpp $<TARGET_OBJECTS:test_main>)
+add_executable(matrix_test matrix_test.cpp matrix.cpp galois.cpp util.cpp $<TARGET_OBJECTS:test_main>)
 add_test(NAME matrix_test COMMAND matrix_test)
 
-add_executable(rs_test rs_test.cpp rs.cpp matrix.cpp galois.cpp $<TARGET_OBJECTS:test_main>)
+add_executable(rs_test rs_test.cpp rs.cpp matrix.cpp galois.cpp util.cpp $<TARGET_OBJECTS:test_main>)
 add_test(NAME rs_test COMMAND rs_test)
 
 set_target_properties(

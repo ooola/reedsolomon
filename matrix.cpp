@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+#include "util.h"
 #include "matrix.h"
 
 /**
@@ -28,7 +29,7 @@
  * @param initColumns The number of columns in the matrix.
  */
 matrix_t* matrix_init(int initRows, int initColumns) {
-    matrix_t* m = (matrix_t *) calloc(sizeof(matrix_t), 1);
+    matrix_t* m = (matrix_t *) allocate_shared_memory_or_exit(sizeof(matrix_t));
     if (!m) {
         fprintf(stderr, "failed to allocate matrix");
         exit(1);
@@ -38,12 +39,31 @@ matrix_t* matrix_init(int initRows, int initColumns) {
     m->rows = initRows;
 
     size_t count = initRows * initColumns;
-    m->data = (BYTE *) calloc(count, 1);
+    m->data = (BYTE *) allocate_shared_memory_or_exit(count);
     if (!m->data) {
         fprintf(stderr, "failed to allocate matrix data");
         exit(1);
     }
     return m;
+}
+
+/**
+ * free's the matrix
+ *
+ * @param matrix_t* The matrix to free
+ */
+void matrix_free(matrix_t* m)
+{
+    if (!m) {
+        fprintf(stderr, "failed to free NULL matrix, exiting...");
+        exit(1);
+    }
+    if (!m->data) {
+        fprintf(stderr, "failed to free NULL matrix data, exiting...");
+        exit(1);
+    }
+    free_memory(m->data);
+    free_memory(m);
 }
 
 /**
@@ -240,8 +260,8 @@ matrix_t* matrix_submatrix(matrix_t* m, int rmin, int cmin, int rmax, int cmax) 
  * Returns one row of the matrix as a byte array.
  * caller must free the row
  */
-BYTE* matrix_get_row(matrix_t* m, int row) {
-    BYTE *result = (BYTE *) calloc(1, m->columns);
+BYTE* matrix_get_row_copy(matrix_t* m, int row) {
+    BYTE *result = (BYTE *) allocate_shared_memory_or_exit(m->columns);
     if (!result) {
         fprintf(stderr, "malloc failure, exitin\n");
         exit(1);
@@ -250,6 +270,22 @@ BYTE* matrix_get_row(matrix_t* m, int row) {
         result[c] = matrix_get(m, row, c);
     }
     return result;
+}
+
+/**
+ * Returns one row of the matrix as a byte array.
+ */
+BYTE* matrix_get_row(matrix_t* m, int row) {
+    if (!m) {
+        fprintf(stderr, "matrix_get_row passed null matrix, exiting...");
+        exit(1);
+    }
+    if (row > m->rows || row < 0) {
+        fprintf(stderr, "matrix_get_row passed invalid row number, exitin...");
+        exit(1);
+    }
+    int offset = ((m->columns) * row);
+    return m->data + offset;
 }
 
 /**

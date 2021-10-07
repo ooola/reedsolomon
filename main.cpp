@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#include "util.h"
 #include "rs.h"
 
 #define DATA_SHARDS 4
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
     printf("%s\n%s\n", argv[0], argv[1]);
 
     //char *file_name = argv[1];
-    char const* file_name = "/Users/onordstrom/code/reedsolomon/sample-input.txt";
+    char const* file_name = "/Users/onordstrom/src/reedsolomon/sample-input.txt";
 
     if (stat(file_name, &sb) == -1) {
         perror("stat");
@@ -101,13 +102,9 @@ int main(int argc, char *argv[])
     // Create a buffer holding the file size, followed by
     // the contents of the file.
     int bufferSize = shardSize * DATA_SHARDS;
-    char* file_buffer = (char*) calloc(1, bufferSize);
-    if (!file_buffer) {
-        printf("malloc failed, exiting.");
-        exit(1);
-    }
+    char* file_buffer = (char*) allocate_shared_memory_or_exit((size_t)bufferSize);
 
-    // java is big endian so to be compatible with JavaReedSolomon
+    // java is big endian so to be compatible with JavaReedSolomon convert the filesize to big endian
     int32_t big_endian_file_size = myntohl(fileSize);
     memcpy(file_buffer, &big_endian_file_size, BYTES_IN_INT);
 

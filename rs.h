@@ -1,4 +1,6 @@
 // Copyright 2021 Ola Nordstrom
+#ifndef RS_H
+#define RS_H
 
 #include "matrix.h"
 
@@ -17,3 +19,5 @@ matrix_t* vandermonde(int rows, int cols);
 matrix_t* buildMatrix(int dataShards, int totalShards);
 void encode_parity(rs_t* r, BYTE* shards, int offset, int byte_count);
 void code_some_shards(rs_t* r, BYTE* input_shards, int input_count, BYTE* outputs, int output_count, int offset, int byte_count);
+
+#endif
