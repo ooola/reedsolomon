@@ -33,3 +33,23 @@ TEST_CASE("test one encode") {
 
     //TODO do implement isParityCorrect() function
 }
+
+TEST_CASE("test non uniform encode") {
+    rs_t* r = rs(4, 2);
+    std::cout << " here's the matrix\n";
+    matrix_print(r->m, false);
+
+    BYTE shards[12] = {0, 1,
+                       4, 5,
+                       2, 3,
+                       6, 7,
+                       0, 0,
+                       0, 0};
+
+    encode_parity(r, shards, 0, 2);
+    
+    CHECK(shards[8] == 44);
+    CHECK(shards[9] == 45);
+    CHECK(shards[10] == 40);
+    CHECK(shards[11] == 41);
+}
