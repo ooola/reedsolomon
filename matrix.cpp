@@ -398,7 +398,6 @@ matrix_t *matrix_invert(matrix_t *m) {
             if (matrix_get(m, rowAbove, d) != (BYTE) 0) {
                 BYTE scale = matrix_get(m, rowAbove, d);
                 for (int c = 0; c < m->columns; c++) {
-                    //data[rowAbove][c] ^= Galois.multiply(scale, data[d][c]);
                     BYTE v = matrix_get(m, rowAbove, c);
                     v ^= multiply(scale, matrix_get(m, d, c));
                     matrix_set(m, rowAbove, c, v);

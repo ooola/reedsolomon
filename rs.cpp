@@ -222,13 +222,13 @@ static BYTE EXP_TABLE2[512] = {
 #endif
 
     matrix_t* m = r->parity_rows; // parity rows
-    for (int iByte = offset; iByte < offset + byte_count; iByte++) {
-        for (int iOutput = 0; iOutput < output_count; iOutput++) {
-            BYTE* matrixRow = m->data + ((m->columns) * iOutput);
+    for (int byte_index = offset; byte_index < offset + byte_count; byte_index++) {
+        for (int output_index = 0; output_index < output_count; output_index++) {
+            BYTE* matrixRow = m->data + ((m->columns) * output_index);
             int value = 0;
-            for (BYTE iInput = 0; iInput < input_count; iInput++) {
-                BYTE a = matrixRow[iInput];
-                int addr = (iInput * byte_count) + iByte;
+            for (BYTE input_index = 0; input_index < input_count; input_index++) {
+                BYTE a = matrixRow[input_index];
+                int addr = (input_index * byte_count) + byte_index;
                 BYTE b = input_shards[addr];
 #ifdef USE_GPU
                 if (a == 0 || b == 0)
@@ -237,10 +237,10 @@ static BYTE EXP_TABLE2[512] = {
                 }
                 else
                 {
-                    int logA = LOG_TABLE2[a & 0xFF];
-                    int logB = LOG_TABLE2[b & 0xFF];
-                    int logResult = logA + logB;
-                    value ^= EXP_TABLE2[logResult];
+                    int log_a = LOG_TABLE2[a & 0xFF];
+                    int log_b = LOG_TABLE2[b & 0xFF];
+                    int log_result = log_a + log_b;
+                    value ^= EXP_TABLE2[log_result];
                 }
 #else
                 // the multiply function needs to be configured to be callable from the kernel (GPU) function
@@ -249,7 +249,7 @@ static BYTE EXP_TABLE2[512] = {
                 value ^= multiply(a, b);
 #endif
             }
-            int output_addr = (iOutput * byte_count) + iByte;
+            int output_addr = (output_index * byte_count) + byte_index;
             outputs[output_addr] =  value;
         }
     }
@@ -339,16 +339,16 @@ static BYTE EXP_TABLE2[512] = {
     0x7d, 0xfa, 0xe9, 0xcf, 0x83, 0x1b, 0x36, 0x6c, 0xd8, 0xad, 0x47, 0x8e};
 
     matrix_t* m = r->parity_rows; // parity rows
-    for (int iByte = offset; iByte < offset + byte_count; iByte++)
+    for (int byte_index = offset; byte_index < offset + byte_count; byte_index++)
     {
-        int iOutput = blockIdx.x;
+        int output_index = blockIdx.x;
         //printf("blockIdx.x: %d blockDim.x: %d threadIdx.x: %d\n", blockIdx.x, blockDim.x, threadIdx.x);
-        BYTE *matrixRow = m->data + ((m->columns) * iOutput);
+        BYTE *matrixRow = m->data + ((m->columns) * output_index);
         int value = 0;
-        for (BYTE iInput = 0; iInput < input_count; iInput++)
+        for (BYTE input_index = 0; input_index < input_count; input_index++)
         {
-            BYTE a = matrixRow[iInput];
-            int addr = (iInput * byte_count) + iByte;
+            BYTE a = matrixRow[input_index];
+            int addr = (input_index * byte_count) + byte_index;
             BYTE b = input_shards[addr];
             if (a == 0 || b == 0)
             {
@@ -356,13 +356,13 @@ static BYTE EXP_TABLE2[512] = {
             }
             else
             {
-                int logA = LOG_TABLE2[a & 0xFF];
-                int logB = LOG_TABLE2[b & 0xFF];
-                int logResult = logA + logB;
-                value ^= EXP_TABLE2[logResult];
+                int log_a = LOG_TABLE2[a & 0xFF];
+                int log_b = LOG_TABLE2[b & 0xFF];
+                int log_result = log_a + log_b;
+                value ^= EXP_TABLE2[log_result];
             }
         }
-        int output_addr = (iOutput * byte_count) + iByte;
+        int output_addr = (output_index * byte_count) + byte_index;
         outputs[output_addr] = value;
     }
 }
