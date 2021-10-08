@@ -1,14 +1,13 @@
 // Copyright 2021 Ola Nordstrom
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
 #include "galois.h"
 
 /**
- * The number of elements in the field.dfs
- * kkk
+ * The number of elements in the field.
  */
-
 static int FIELD_SIZE = 256;
 
 /**
@@ -21,7 +20,6 @@ static int FIELD_SIZE = 256;
  * The possibilities are: 29, 43, 45, 77, 95, 99, 101, 105,
  * 113, 135, 141, 169, 195, 207, 231, and 245.
  */
-
 static int GENERATING_POLYNOMIAL = 29;
 
 /**
@@ -120,7 +118,6 @@ static BYTE EXP_TABLE[512] = {
     0xf4, 0xf5, 0xf7, 0xf3, 0xfb, 0xeb, 0xcb, 0x8b, 0xb, 0x16, 0x2c, 0x58, 0xb0,
     0x7d, 0xfa, 0xe9, 0xcf, 0x83, 0x1b, 0x36, 0x6c, 0xd8, 0xad, 0x47, 0x8e};
 
-
 /**
  * A multiplication table for the Galois field.
  *
@@ -139,6 +136,8 @@ void galois_init() {
 /**
  * Adds two elements of the field.  If you're in an inner loop,
  * you should inline this function: it's just XOR.
+ * @param a Byte
+ * @param b Byte
  */
 BYTE galois_add(BYTE a, BYTE b) {
     return (BYTE) (a ^ b);
@@ -147,6 +146,8 @@ BYTE galois_add(BYTE a, BYTE b) {
 /**
  * Inverse of addition.  If you're in an inner loop,
  * you should inline this function: it's just XOR.
+ * @param a Byte
+ * @param b Byte
  */
 BYTE galois_subtract(BYTE a, BYTE b) {
     return (BYTE) (a ^ b);
@@ -154,6 +155,9 @@ BYTE galois_subtract(BYTE a, BYTE b) {
 
 /**
  * Multiplies two elements of the field.
+ * @param a Byte
+ * @param b Byte
+ * @return response
  */
 BYTE galois_multiply(BYTE a, BYTE b) {
     if (a == 0 || b == 0) {
@@ -169,6 +173,9 @@ BYTE galois_multiply(BYTE a, BYTE b) {
 
 /**
  * Inverse of multiplication.
+ * @param a Byte
+ * @param b Byte
+ * @return response
  */
 BYTE galois_divide(BYTE a, BYTE b) {
     if (a == 0) {
@@ -215,6 +222,8 @@ BYTE galois_exp(BYTE a, int n) {
 
 /**
  * Generates a logarithm table given a starting polynomial.
+ * @param polynomial
+ * @return int16_t pointer to the log table.
  */
 int16_t* generateLogTable(int polynomial) {
     int16_t* result = (int16_t *) allocate_shared_memory_or_exit((size_t)FIELD_SIZE);
@@ -238,6 +247,8 @@ int16_t* generateLogTable(int polynomial) {
 
 /**
  * Generates the inverse log table.
+ * @param log table
+ * @return byte pointer to the log table.
  */
 BYTE* generateExpTable(int16_t* logTable) {
     size_t data_size = (FIELD_SIZE * 2) - 2;
@@ -256,6 +267,8 @@ BYTE* generateExpTable(int16_t* logTable) {
  * To get the result of multiplying a and b:
  *
  *     MULTIPLICATION_TABLE[a][b]
+ * 
+ * @return pointer to the multiplication table
  */
 BYTE* generateMultiplicationTable() {
     BYTE *result = (BYTE *) allocate_shared_memory_or_exit(65536); // 256*256 = 65536
