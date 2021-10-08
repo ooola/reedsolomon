@@ -1,9 +1,13 @@
 # TODO: integrate this into CMake
-all: rs
+all: grs
+
+run: clean grs
+	./grs sample-input.txt
+	./diff-samples.sh
 
 grs:
 	CUDA_HOME=/usr/lib/cuda nvcc -lstdc++ -DUSE_GPU -o grs rs.cu matrix.cpp galois.cpp util.cpp main.cpp
 
 .PHONY: clean
 clean:
-	-rm *.o grs
+	-rm grs
