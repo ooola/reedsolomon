@@ -33,6 +33,16 @@ Thu Oct  7 00:45:11 2021
 +-----------------------------------------------------------------------------+
 ```
 
+to loop either do
+
+    nvidia-smi -l 1
+
+or
+
+    watch -n0.1 nvidia-smi
+
+the latter refreshes every 0.1 seconds
+
 ## Links
 
 <https://cuda-tutorial.readthedocs.io/en/latest/tutorials/tutorial01/>
