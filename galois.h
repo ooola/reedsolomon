@@ -23,6 +23,4 @@ int16_t* generateLogTable(int polynomial);
 BYTE *generateExpTable(int16_t* logTable);
 BYTE *generateMultiplicationTable();
 
-BYTE *getLogTable();
-
 #endif

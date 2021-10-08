@@ -2,6 +2,17 @@
 #include <stdio.h>
 #include "util.h"
 
+#ifdef USE_GPU
+
+#include <cuda_runtime_api.h>
+#include <cuda.h>
+
+#define printf(f, ...) ((void)(f, __VA_ARGS__),0)
+#define fprintf(f, ...) ((void)(f, __VA_ARGS__),0)
+#define exit(...) ((void)(__VA_ARGS__),0)
+
+#endif
+
 /**
  * allocates memory shared between the GPU and Host so that it can be accessesed from both
  */

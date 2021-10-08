@@ -275,7 +275,7 @@ BYTE* matrix_get_row_copy(matrix_t* m, int row) {
 /**
  * Returns one row of the matrix as a byte array.
  */
-BYTE* matrix_get_row(matrix_t* m, int row) {
+__device__ BYTE* matrix_get_row(matrix_t* m, int row) {
     if (!m) {
         fprintf(stderr, "matrix_get_row passed null matrix, exiting...");
         exit(1);

@@ -1,0 +1,25 @@
+SRC = galois.cpp  main.cpp matrix.cpp rs.cpp  util.cpp
+
+all: rs
+
+rs.o: rs.cpp 
+	CUDA_HOME=/usr/lib/cuda gcc -o $@ -D USE_GPU $?
+
+matrix.o: galois.cpp matrix.cpp util.cpp
+	CUDA_HOME=/usr/lib/cuda gcc -o $@ -D USE_GPU $?
+
+galois.o: galois.cpp util.cpp matrix.cpp
+	CUDA_HOME=/usr/lib/cuda gcc -o $@ -D USE_GPU $?
+
+util.o: util.cpp
+	CUDA_HOME=/usr/lib/cuda gcc -o $@ -D USE_GPU $?
+
+rs: rs.cu matrix.cu galois.cpp util.cpp
+	CUDA_HOME=/usr/lib/cuda nvcc -arch=sm_35 -rdc=true -lstdc++ -o $@ -D USE_GPU $? 
+
+working:
+	CUDA_HOME=/usr/lib/cuda nvcc  -lstdc++ -DUSE_GPU -o rs  rs.cu matrix.cpp galois.cpp util.cpp main.cpp
+
+.PHONY: clean
+clean:
+	-rm *.o rs

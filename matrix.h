@@ -46,7 +46,8 @@ matrix_t *matrix_invert(matrix_t *m);
 void matrix_swap_rows(matrix_t* m, int r1, int r2);
 bool matrix_equals(matrix_t* a, matrix_t* b);
 std::string matrix_string(matrix_t* m);
-BYTE* matrix_get_row(matrix_t* m, int row);
 BYTE* matrix_get_row_copy(matrix_t* m, int row);
+
+BYTE* matrix_get_row(matrix_t* m, int row);
 
 #endif

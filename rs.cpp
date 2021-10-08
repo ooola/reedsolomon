@@ -102,7 +102,9 @@ void encode_parity(rs_t* r, BYTE *shards, int offset, int byte_count)
 
     BYTE* outputs = shards + (r->data_shards * byte_count);
 
+__global__
     code_some_shards(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
+    cudaDeviceSynchronize();
 }
 
 /**
