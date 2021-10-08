@@ -111,10 +111,14 @@ void encode_parity(rs_t* r, BYTE *shards, int offset, int byte_count)
 
     BYTE* outputs = shards + (r->data_shards * byte_count);
 
+#ifdef USE_GPU
     /// <<< NUMBER_OF_BLOCKS, NUMBER_OF_THREADS_PER_BLOCK>>>
     code_some_shards<<<1, 1>>>(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
     //code_some_shards2<<<2, 1>>>(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
     cudaDeviceSynchronize();
+#else
+    code_some_shards(r, shards, r->data_shards, outputs, r->parity_shards, offset, byte_count);
+#endif
 }
 
 /**
@@ -136,6 +140,8 @@ void code_some_shards(rs_t* r, BYTE* input_shards, int input_count,
                       BYTE* outputs, int output_count, int offset, int byte_count)
 #endif
 {
+
+#ifdef USE_GPU
     BYTE LOG_TABLE2[256] = {
         0,    0,    1,   25,    2,   50,   26,  198,
         3,  223,   51,  238,   27,  104,  199,   75,
@@ -213,22 +219,18 @@ static BYTE EXP_TABLE2[512] = {
     0x9b, 0x2b, 0x56, 0xac, 0x45, 0x8a, 0x9, 0x12, 0x24, 0x48, 0x90, 0x3d, 0x7a,
     0xf4, 0xf5, 0xf7, 0xf3, 0xfb, 0xeb, 0xcb, 0x8b, 0xb, 0x16, 0x2c, 0x58, 0xb0,
     0x7d, 0xfa, 0xe9, 0xcf, 0x83, 0x1b, 0x36, 0x6c, 0xd8, 0xad, 0x47, 0x8e};
+#endif
 
     matrix_t* m = r->parity_rows; // parity rows
     for (int iByte = offset; iByte < offset + byte_count; iByte++) {
         for (int iOutput = 0; iOutput < output_count; iOutput++) {
             BYTE* matrixRow = m->data + ((m->columns) * iOutput);
-            if (blockDim.x != 1) { 
-                // assume that the threads match the number of parity columns
-                matrixRow = m->data + ((m->columns) * iOutput);
-            }
-
             int value = 0;
             for (BYTE iInput = 0; iInput < input_count; iInput++) {
                 BYTE a = matrixRow[iInput];
                 int addr = (iInput * byte_count) + iByte;
                 BYTE b = input_shards[addr];
-                //value ^= multiply(a, b);
+#ifdef USE_GPU
                 if (a == 0 || b == 0)
                 {
                     value ^= 0;
@@ -240,6 +242,12 @@ static BYTE EXP_TABLE2[512] = {
                     int logResult = logA + logB;
                     value ^= EXP_TABLE2[logResult];
                 }
+#else
+                // the multiply function needs to be configured to be callable from the kernel (GPU) function
+                // as do the log tables above, they must be able to be read from the kernel function
+                // until that's sorted out just deal with it using ifdefs, it's too late tonight to sort this out
+                value ^= multiply(a, b);
+#endif
             }
             int output_addr = (iOutput * byte_count) + iByte;
             outputs[output_addr] =  value;
@@ -251,10 +259,6 @@ static BYTE EXP_TABLE2[512] = {
 __global__
 void code_some_shards2(rs_t* r, BYTE* input_shards, int input_count, 
                       BYTE* outputs, int output_count, int offset, int byte_count)
-#else
-void code_some_shards2(rs_t* r, BYTE* input_shards, int input_count, 
-                      BYTE* outputs, int output_count, int offset, int byte_count)
-#endif
 {
     BYTE LOG_TABLE2[256] = {
         0,    0,    1,   25,    2,   50,   26,  198,
@@ -362,3 +366,4 @@ static BYTE EXP_TABLE2[512] = {
         outputs[output_addr] = value;
     }
 }
+#endif
