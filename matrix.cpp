@@ -429,7 +429,7 @@ bool matrix_equals(matrix_t* a, matrix_t* b) {
     }
     return true;
 }
-/*
+
 std::string matrix_string(matrix_t* m) {
     std::string s = "";
     for (size_t r = 0; r < m->rows; r++)
@@ -442,4 +442,3 @@ std::string matrix_string(matrix_t* m) {
     }
     return s;
 }
-*/
