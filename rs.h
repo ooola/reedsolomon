@@ -24,7 +24,6 @@ __global__
 void code_some_shards2(rs_t* r, BYTE* input_shards, int input_count, BYTE* outputs, int output_count, int offset, int byte_count);
 #else
 void code_some_shards(rs_t* r, BYTE* input_shards, int input_count, BYTE* outputs, int output_count, int offset, int byte_count);
-void code_some_shards2(rs_t* r, BYTE* input_shards, int input_count, BYTE* outputs, int output_count, int offset, int byte_count);
 #endif
 
 #endif

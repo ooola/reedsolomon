@@ -6,6 +6,7 @@ run: clean grs
 	./diff-samples.sh
 
 grs:
+	cp rs.cpp rs.cu
 	CUDA_HOME=/usr/lib/cuda nvcc -lstdc++ -DUSE_GPU -o grs rs.cu matrix.cpp galois.cpp util.cpp main.cpp
 
 .PHONY: clean
