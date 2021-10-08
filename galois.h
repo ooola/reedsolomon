@@ -13,11 +13,11 @@ typedef uint8_t BYTE;
  */
 
 void galois_init();
-BYTE add(BYTE a, BYTE b);
-BYTE subtract(BYTE a, BYTE b);
-BYTE multiply(BYTE a, BYTE b);
-BYTE divide(BYTE a, BYTE b);
-BYTE exp(BYTE a, int n);
+BYTE galois_add(BYTE a, BYTE b);
+BYTE galois_subtract(BYTE a, BYTE b);
+BYTE galois_multiply(BYTE a, BYTE b);
+BYTE galois_divide(BYTE a, BYTE b);
+BYTE galois_exp(BYTE a, int n);
 
 int16_t* generateLogTable(int polynomial);
 BYTE *generateExpTable(int16_t* logTable);

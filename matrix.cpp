@@ -180,8 +180,7 @@ matrix_t* matrix_times(matrix_t* m, matrix_t* right) {
         for (int c = 0; c < right->columns; c++) {
             BYTE value = 0;
             for (int i = 0; i < m->columns; i++) {
-                //value ^= Galois.multiply(get(r, i), right.get(i, c));
-                value ^= multiply(matrix_get(m, r, i), matrix_get(right, i, c));
+                value ^= galois_multiply(matrix_get(m, r, i), matrix_get(right, i, c));
             }
             matrix_set(result, r, c, value);
         }
@@ -371,9 +370,9 @@ matrix_t *matrix_invert(matrix_t *m) {
         }
         // Scale to 1.
         if (matrix_get(m, r, r) != (BYTE) 1) {
-            BYTE scale = divide(1, matrix_get(m, r, r));
+            BYTE scale = galois_divide(1, matrix_get(m, r, r));
             for (int c = 0; c < m->columns; c++) {
-                matrix_set(m, r, c, multiply(matrix_get(m, r, c), scale));
+                matrix_set(m, r, c, galois_multiply(matrix_get(m, r, c), scale));
             }
         }
         // Make everything below the 1 be a 0 by subtracting
@@ -383,9 +382,8 @@ matrix_t *matrix_invert(matrix_t *m) {
             if (matrix_get(m, rowBelow, r) != (BYTE) 0) {
                 BYTE scale = matrix_get(m, rowBelow, r);
                 for (int c = 0; c < m->columns; c++) {
-                    //data[rowBelow][c] ^= Galois.multiply(scale, data[r][c]);
                     BYTE v = matrix_get(m, rowBelow, c);
-                    v ^= multiply(scale, matrix_get(m, r, c));
+                    v ^= galois_multiply(scale, matrix_get(m, r, c));
                     matrix_set(m, rowBelow, c, v);
                 }
             }
@@ -399,7 +397,7 @@ matrix_t *matrix_invert(matrix_t *m) {
                 BYTE scale = matrix_get(m, rowAbove, d);
                 for (int c = 0; c < m->columns; c++) {
                     BYTE v = matrix_get(m, rowAbove, c);
-                    v ^= multiply(scale, matrix_get(m, d, c));
+                    v ^= galois_multiply(scale, matrix_get(m, d, c));
                     matrix_set(m, rowAbove, c, v);
                 }
             }

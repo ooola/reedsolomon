@@ -42,7 +42,7 @@ matrix_t* vandermonde(int rows, int cols) {
     matrix_t* result = matrix_init(rows, cols);
     for (BYTE r = 0; r < rows; r++) {
         for (BYTE c = 0; c < cols; c++) {
-            matrix_set(result, r, c, exp((BYTE)r, c));
+            matrix_set(result, r, c, galois_exp((BYTE)r, c));
         }
     }
     return result;
@@ -246,7 +246,7 @@ static BYTE EXP_TABLE2[512] = {
                 // the multiply function needs to be configured to be callable from the kernel (GPU) function
                 // as do the log tables above, they must be able to be read from the kernel function
                 // until that's sorted out just deal with it using ifdefs, it's too late tonight to sort this out
-                value ^= multiply(a, b);
+                value ^= galois_multiply(a, b);
 #endif
             }
             int output_addr = (output_index * byte_count) + byte_index;
