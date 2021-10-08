@@ -9,6 +9,12 @@ First install the nvidia toolkit
 
 ## Useful commands
 
+Make a random file
+```
+dd if=/dev/urandom of=sample.txt bs=1G count=1
+```
+
+Nvidia top like command.
 ```
 $ nvidia-smi
 Thu Oct  7 00:45:11 2021
@@ -32,6 +38,16 @@ Thu Oct  7 00:45:11 2021
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
+
+To loop either do
+
+    nvidia-smi -l 1
+
+or
+
+    watch -n0.1 nvidia-smi
+
+the latter refreshes every 0.1 seconds
 
 ## Links
 

@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#ifdef USE_GPU
+#include <cuda_runtime_api.h>
+#include <cuda.h>
+#endif
+
+#include <cstring>
+
 #include "util.h"
 #include "rs.h"
 
@@ -12,6 +19,8 @@
 #define PARITY_SHARDS 2
 #define TOTAL_SHARDS 6
 #define BYTES_IN_INT 4 // TODO double check this on x64
+
+
 
 /**
  * define ntohl here since byteswap.h is not available on OS X where the testing was done
@@ -76,14 +85,16 @@ int main(int argc, char *argv[])
     FILE *fp;
     struct stat sb;
 
-    if (argc != 1) {
+    printf("arg1: %s\n", argv[1]);
+    if (argc != 2) {
+        printf("argc: %d\n", argc);
         printf("Usage: SampleEncoder <fileName>\n");
         return 1;
     }
     printf("%s\n%s\n", argv[0], argv[1]);
 
-    //char *file_name = argv[1];
-    char const* file_name = "/Users/onordstrom/src/reedsolomon/sample-input.txt";
+    char *file_name = argv[1];
+    //char const* file_name = "/Users/onordstrom/src/reedsolomon/sample-input.txt";
 
     if (stat(file_name, &sb) == -1) {
         perror("stat");

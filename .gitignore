@@ -17,3 +17,5 @@ matrix_test
 build
 rs_test
 sample-input.txt.*
+sample.txt*
+grs

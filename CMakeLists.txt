@@ -41,6 +41,16 @@ set_target_properties(
         CMAKE_CXX_EXTENSIONS YES
 )
 
+# TODO figure out how to integrate Cmake and Cuda along with the native code version
+#add_executable(grs rs.cu matrix.cpp galois.cpp util.cpp main.cpp )
+#target_compile_options(grs PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-lstdc++ -DUSE_GPU>) 
+#set_target_properties(
+#    grs
+#    PROPERTIES
+#        CUDA_HOME /usr/lib/cuda
+#)
+
+
 #include_directories(../)
 
 #set_target_properties(test1 PROPERTIES 

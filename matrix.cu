@@ -275,7 +275,7 @@ BYTE* matrix_get_row_copy(matrix_t* m, int row) {
 /**
  * Returns one row of the matrix as a byte array.
  */
-BYTE* matrix_get_row(matrix_t* m, int row) {
+__device__ BYTE* matrix_get_row(matrix_t* m, int row) {
     if (!m) {
         fprintf(stderr, "matrix_get_row passed null matrix, exiting...");
         exit(1);
@@ -429,7 +429,7 @@ bool matrix_equals(matrix_t* a, matrix_t* b) {
     }
     return true;
 }
-
+/*
 std::string matrix_string(matrix_t* m) {
     std::string s = "";
     for (size_t r = 0; r < m->rows; r++)
@@ -442,3 +442,4 @@ std::string matrix_string(matrix_t* m) {
     }
     return s;
 }
+*/
