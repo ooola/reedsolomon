@@ -1,3 +1,4 @@
+// Copyright 2021 Ola Nordstrom
 
 #include "galois.h"
 #include "doctest.h"

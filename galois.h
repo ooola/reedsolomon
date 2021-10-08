@@ -1,16 +1,11 @@
+// Copyright 2021 Ola Nordstrom
+
 #ifndef GALOIS_H
 #define GALOIS_H
 
 #include <stdint.h>
 
-//typedef char BYTE;
-//typedef int8_t BYTE;
 typedef uint8_t BYTE;
-//typedef int16_t BYTE;
-
-/**
- * To use call generateMultiplicationTable() 
- */
 
 void galois_init();
 BYTE galois_add(BYTE a, BYTE b);

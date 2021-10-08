@@ -1,20 +1,5 @@
-/*
- * =====================================================================================
- *
- *       Filename:  test_main.cpp
- *
- *    Description:  i
- *
- *        Version:  1.0
- *        Created:  09/27/2021 16:23:42
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
- */
+// Copyright 2021 Ola Nordstrom
+
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
 

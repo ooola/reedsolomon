@@ -1,4 +1,5 @@
 // Copyright 2021 Ola Nordstrom
+
 #ifndef RS_H
 #define RS_H
 

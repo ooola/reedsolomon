@@ -1,20 +1,5 @@
-/*
- * =====================================================================================
- *
- *       Filename:  matrix.cpp
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  09/19/2021 14:19:04
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
- */
+// Copyright 2021 Ola Nordstrom
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>

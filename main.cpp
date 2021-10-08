@@ -1,3 +1,5 @@
+// Copyright 2021 Ola Nordstrom
+
 /**
  * This implements the sample encoder
  */

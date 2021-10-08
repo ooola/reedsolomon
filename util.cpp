@@ -1,3 +1,5 @@
+// Copyright 2021 Ola Nordstrom
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "util.h"

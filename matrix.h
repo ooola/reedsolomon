@@ -1,3 +1,5 @@
+// Copyright 2021 Ola Nordstrom
+
 #ifndef MATRIX_H
 #define MATRIX_H
 

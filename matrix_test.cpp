@@ -1,3 +1,5 @@
+// Copyright 2021 Ola Nordstrom
+
 #include "matrix.h"
 #include "doctest.h"
 

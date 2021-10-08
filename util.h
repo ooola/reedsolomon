@@ -1,4 +1,5 @@
 // Copyright 2021 Ola Nordstrom
+
 #ifndef UTIL_H
 #define UTIL_H
 

@@ -1,3 +1,5 @@
+// Copyright 2021 Ola Nordstrom
+
 #include <iostream>
 #include "rs.h"
 #include "doctest.h"
