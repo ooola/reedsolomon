@@ -1,44 +1,23 @@
-#README
+# README
+
+This is a C implementation of the Backblaze [Java Reed Solomon](https://github.com/Backblaze/JavaReedSolomon) encoding and decoding over an 8-bit Galois field. 
 
 ## TODO
-- -change get_row to not allocate memory-
-- -free memory-
-- -change memory allocation to use cudaMalloc-
- 
+- ~~change get_row to not allocate memory~~
+- ~~free memory~~
+- ~~change memory allocation to use cudaMalloc~~
+- integrate Makefile.cuda into cmake
+- figure out if copying rs.cpp to rs.cu is required or if there some nvcc flag that can do it
+- impelement decoding
+- add more tests
+- cleanup tests to use strings (easier to read)
+- separate the pure C from the few C++ functions in the implementation
+- investigate move to kernel driver
+- investigate additional CUDA speedups
 
 ## Build
 
 ```
-CUDA_HOME=/usr/lib/cuda
-```
-
-## Make code compatible
-```
-ubuntu@gc-awesome-franklin:~/reedsolomon$ make -f Makefile.cuda rs
-CUDA_HOME=/usr/lib/cuda nvcc -lstdc++ -o rs -D USE_GPU rs.cu matrix.cpp galois.cpp util.cpp 
-rs.cu(100): error: calling a __host__ function("fprintf") from a __global__ function("encode_parity") is not allowed
-
-rs.cu(100): error: identifier "fprintf" is undefined in device code
-
-rs.cu(100): error: identifier "stderr" is undefined in device code
-
-rs.cu(101): error: calling a __host__ function("exit") from a __global__ function("encode_parity") is not allowed
-
-rs.cu(101): error: identifier "exit" is undefined in device code
-
-rs.cu(104): error: calling a __host__ function("fprintf") from a __global__ function("encode_parity") is not allowed
-
-rs.cu(104): error: identifier "fprintf" is undefined in device code
-
-rs.cu(104): error: identifier "stderr" is undefined in device code
-
-rs.cu(105): error: calling a __host__ function("exit") from a __global__ function("encode_parity") is not allowed
-
-rs.cu(105): error: identifier "exit" is undefined in device code
-
-rs.cu(110): error: calling a __host__ function("code_some_shards") from a __global__ function("encode_parity") is not allowed
-
-rs.cu(110): error: identifier "code_some_shards" is undefined in device code
-
-12 errors detected in the compilation of "/tmp/tmpxft_00001635_00000000-8_rs.cpp1.ii".
+cmake . && make       # to build the native code implementation
+make -f Makefile.cuda # to build the Nvidia CUDA implementation
 ```
